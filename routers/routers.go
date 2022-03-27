@@ -13,7 +13,6 @@ func SetUpRouter() *gin.Engine {
 	{
 		auth.POST("/signup", controllers.CreateUser)
 		auth.POST("/signin", controllers.SignIn)
-		auth.GET("/users", controllers.GetUsers)
 	}
 
 	wallet := r.Group("api/v1/wallets")
@@ -21,7 +20,6 @@ func SetUpRouter() *gin.Engine {
 		wallet.GET("/:wallet_id/balance", controllers.GetWalletBalance)
 		wallet.POST("/:wallet_id/credit", controllers.CreditWallet)
 		wallet.POST("/:wallet_id/debit", controllers.DebitWallet)
-		wallet.GET("/wallets", controllers.GetWallets)
 	}
 	return r
 }

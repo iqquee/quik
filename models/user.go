@@ -14,14 +14,6 @@ func CreateUser(user *User) (err error) {
 	return nil
 }
 
-//get all users
-func GetAllUsers(user *[]User) (err error) {
-	if err := config.DB.Find(user).Error; err != nil {
-		return err
-	}
-	return nil
-}
-
 func GetUserByUsername(user *User, username string) (*User, error) {
 	if err := config.DB.Where("username = ?", username).First(user).Error; err != nil {
 		return nil, err
