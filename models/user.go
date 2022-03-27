@@ -22,12 +22,6 @@ func GetAllUsers(user *[]User) (err error) {
 	return nil
 }
 
-//delete a user
-func DeleteUser(user *User, id string) (err error) {
-	config.DB.Where("id = ?", id).Delete(user)
-	return nil
-}
-
 func GetUserByUsername(user *User, username string) (*User, error) {
 	if err := config.DB.Where("username = ?", username).First(user).Error; err != nil {
 		return nil, err

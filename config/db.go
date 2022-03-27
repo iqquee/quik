@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/go-redis/redis"
 	"gorm.io/gorm"
 )
 
@@ -38,3 +39,8 @@ func DbURL(dbConfig *DBConfig) string {
 		dbConfig.DBName,
 	)
 }
+
+//redis
+var Cached = redis.NewClient(&redis.Options{
+	Addr: "localhost:6379",
+})

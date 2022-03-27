@@ -14,7 +14,6 @@ func SetUpRouter() *gin.Engine {
 		auth.POST("/signup", controllers.CreateUser)
 		auth.POST("/signin", controllers.SignIn)
 		auth.GET("/users", controllers.GetUsers)
-		auth.DELETE("/:id", controllers.DeleteUser)
 	}
 
 	wallet := r.Group("api/v1/wallets")
