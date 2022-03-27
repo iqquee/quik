@@ -45,7 +45,7 @@ func CreateUser(c *gin.Context) {
 
 		err := models.CreateUser(&user)
 		if err != nil {
-			fmt.Println(err.Error())
+			log.Println(err.Error())
 			c.JSON(http.StatusNotFound, gin.H{
 				"error": err.Error(),
 			})
@@ -59,7 +59,7 @@ func CreateUser(c *gin.Context) {
 		//if the user was successfully created then create a wallet for the use
 		walletErr := models.CreateWallet(&wallet)
 		if walletErr != nil {
-			fmt.Println(err.Error())
+			log.Println(err.Error())
 			c.JSON(http.StatusNotFound, gin.H{
 				"error":   err.Error(),
 				"message": "there was an error creating your wallet",
