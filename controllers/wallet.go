@@ -19,24 +19,6 @@ var (
 	headerErr   = "the username is needs to be passed in the request header"
 )
 
-func GetWallets(c *gin.Context) {
-	//logs the incoming request
-	log.Info(c.Request)
-	var wallets []models.UserWallet
-	err := models.GetAllWallets(&wallets)
-	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{
-			"error": "there are no wallets available",
-		})
-		log.Println(err.Error())
-		return
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"users": wallets,
-		})
-	}
-}
-
 func GetWalletBalance(c *gin.Context) {
 	var user models.User
 	var wallet models.UserWallet
