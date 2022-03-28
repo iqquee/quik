@@ -42,5 +42,5 @@ func DbURL(dbConfig *DBConfig) string {
 
 //redis
 var Cached = redis.NewClient(&redis.Options{
-	Addr: "localhost:6379",
+	Addr: os.Getenv("REDIS_ADDR"),
 })
