@@ -38,7 +38,7 @@ func GetWalletBalance(c *gin.Context) {
 	//if there was no balance found then get it from the mysql database
 	//and thereafter save the balance into redis
 	val := config.Cached.Get(userName)
-	log.Println(val)
+	//if they is no balance for the user in redis then query from the mysql database
 	if val == nil {
 		userResult, err := models.GetUserByUsername(&user, userName)
 		if err != nil {
@@ -111,7 +111,7 @@ func CreditWallet(c *gin.Context) {
 		})
 		return
 	}
-	//check if the amout to credit with is not 0
+	//check if the amount to credit with is not 0
 	if creditDetails.Amount <= 0 || creditDetails.Amount <= 0.0 {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "your credit amount cannot be 0 or less than 0",
@@ -149,11 +149,6 @@ func CreditWallet(c *gin.Context) {
 		previousBalance := decimal.NewFromFloat(walletResult.Wallet)
 		credit := decimal.NewFromFloat(creditDetails.Amount)
 		newBalance := previousBalance.Add(credit).String()
-		cacheErr := config.Cached.Set(walletResult.Username, newBalance, 0).Err()
-		if cacheErr != nil {
-			log.Println(cacheErr)
-			return
-		}
 
 		//check if the fund to be sent contains a minus sign before authorizing the credit
 		err := models.UpdateWalletFund(&wallet, creditDetails.Username, newBalance) //the value in database has to be a float e.g 0.0
@@ -162,6 +157,15 @@ func CreditWallet(c *gin.Context) {
 				"error": "an error occured while updating your wallet",
 			})
 			log.Println(err.Error())
+			return
+		}
+		//only update the user balance into the redis database after which the credit wallet have been updated in the mysql database else
+		//it shouldn't save into redis
+
+		//after a user wallet has been credited set the new balance inot redis
+		cacheErr := config.Cached.Set(walletResult.Username, newBalance, 0).Err()
+		if cacheErr != nil {
+			log.Println(cacheErr)
 			return
 		}
 
@@ -207,6 +211,8 @@ func DebitWallet(c *gin.Context) {
 		return
 	}
 
+	// get the username from the request header
+	//since only the user can authorize a debit from his wallet and other users cannot
 	username := c.Request.Header.Get("username")
 	if username == "" {
 		c.JSON(http.StatusBadRequest, gin.H{

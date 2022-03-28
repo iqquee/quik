@@ -11,6 +11,7 @@ type User struct {
 	Email      string `json:"email"`
 	Username   string `json:"username"`
 	Password   string `json:"password"`
+	Token      string `json:"token"`
 }
 
 type UserWallet struct {

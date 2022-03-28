@@ -18,10 +18,3 @@ func UpdateWalletFund(wallet *UserWallet, username string, amount string) (err e
 	}
 	return nil
 }
-
-func GetAllWallets(wallet *[]UserWallet) (err error) {
-	if err := config.DB.Find(wallet).Error; err != nil {
-		return err
-	}
-	return nil
-}
